@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="icon" type="image/svg+xml" href="assets/layola-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital@1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #FFFFFF; }
+  ::selection { background: #39FF14; color: #0D0D0D; }
+  @keyframes lyGlow { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: .85; transform: scale(1.08); } }
+  @keyframes lyMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes lyBlink { 0%,100% { opacity:1; } 50% { opacity:.25; } }
+  @keyframes lySpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .ly-trapezium { clip-path: polygon(9% 0, 91% 0, 100% 100%, 0% 100%); }
+  .ly-reveal-init { opacity: 0; transform: translateY(26px); }
+  .ly-reveal { transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  /* mobile-first base overrides (default = phone), scaled up via min-width below.
+     !important is required here because the elements also carry desktop-oriented
+     inline styles (position/display/grid-template-columns) that would otherwise win. */
+  .ly-rail { display: none !important; }
+  .ly-hero-outer { grid-template-columns: 1fr !important; }
+  .ly-nav-links { display: none !important; }
+  .ly-menu-btn { display: grid !important; }
+  .ly-hero-panel { position: relative !important; width: 100% !important; height: 200px !important; top: auto !important; right: auto !important; margin-bottom: 20px !important; }
+  .ly-hero-h { max-width: 100% !important; padding-top: 0 !important; font-size: 13vw !important; }
+  .ly-hero-wrap { min-height: 0 !important; }
+  .ly-sec-h { font-size: 9.5vw !important; }
+  .ly-services-row { grid-template-columns: 34px 1fr !important; gap:14px !important; padding:22px 0 !important; }
+  .ly-services-row > span:last-child { display:none !important; }
+  .ly-why-inner { grid-template-columns: 1fr !important; gap:6px !important; }
+  .ly-seo-grid { grid-template-columns: 1fr !important; }
+  .ly-media-grid { grid-template-columns: 1fr !important; }
+  .ly-media-grid > div:first-child { margin-bottom: 8px !important; }
+  .ly-index-row { flex-wrap: wrap !important; }
+  .ly-index-row > div:last-child { display: none !important; }
+  .ly-carousel-arrows { display: none !important; }
+  .ly-steps-grid { grid-template-columns: 1fr !important; border-top:none !important; }
+  .ly-steps-grid > div { border-left:none !important; border-top:2px solid #0D0D0D; padding:20px 0 !important; margin-top:0 !important; }
+  .ly-steps-grid > div > div:first-child { margin-left:0 !important; margin-top:16px !important; }
+  .ly-marquee-track { font-size:14px !important; gap:22px !important; }
+  .ly-cta-row { flex-direction: column !important; align-items: stretch !important; }
+  .ly-cta-row a { text-align: center !important; }
+  section { padding-left: 18px !important; padding-right: 18px !important; }
+  header { padding-left: 18px !important; padding-right: 18px !important; }
+  .ly-whatsapp-fab { padding:13px !important; }
+  .ly-whatsapp-fab span:last-child { display: none !important; }
+
+  @media (min-width: 481px) {
+    .ly-hero-h { font-size: 12vw !important; }
+  }
+  @media (min-width: 721px) {
+    .ly-hero-h { font-size: clamp(38px,4.8vw,68px) !important; }
+    .ly-sec-h { font-size: unset !important; }
+    .ly-whatsapp-fab { padding:14px 20px 14px 14px !important; }
+    .ly-whatsapp-fab span:last-child { display: inline !important; }
+    .ly-index-row { flex-wrap: nowrap !important; }
+    .ly-index-row > div:last-child { display: flex !important; }
+    .ly-carousel-arrows { display: grid !important; }
+    .ly-steps-grid { grid-template-columns: repeat(auto-fit,minmax(220px,1fr)) !important; border-top:2px solid #0D0D0D !important; }
+    .ly-steps-grid > div { border-left:1px solid rgba(13,13,13,0.14) !important; border-top:none !important; padding:0 20px !important; }
+    .ly-steps-grid > div > div:first-child { margin-left:-25px !important; margin-top:-5px !important; }
+    .ly-services-row { grid-template-columns: 70px 1fr auto !important; gap:24px !important; padding:30px 0 !important; }
+    .ly-services-row > span:last-child { display:grid !important; }
+    .ly-marquee-track { font-size:17px !important; gap:36px !important; }
+    .ly-cta-row { flex-direction: row !important; align-items: center !important; }
+    .ly-cta-row a { text-align: left !important; }
+    section { padding-left: clamp(20px,5vw,64px) !important; padding-right: clamp(20px,5vw,64px) !important; }
+    header { padding-left: clamp(20px,5vw,64px) !important; padding-right: clamp(20px,5vw,64px) !important; }
+  }
+  @media (min-width: 1001px) {
+    .ly-rail { display: block !important; }
+    .ly-hero-outer { grid-template-columns: 44px 1fr !important; }
+    .ly-nav-links { display: flex !important; }
+    .ly-menu-btn { display: none !important; }
+    .ly-hero-panel { position: absolute !important; width: 44% !important; height: min(80%,440px) !important; top: 0 !important; right: 0 !important; margin-bottom: 0 !important; }
+    .ly-hero-h { max-width: 62% !important; padding-top: clamp(56px,7vw,96px) !important; }
+    .ly-hero-wrap { min-height: clamp(360px,44vw,540px) !important; }
+    .ly-why-inner { grid-template-columns: minmax(160px,260px) 1fr !important; gap:24px !important; }
+    .ly-seo-grid { grid-template-columns: repeat(2,1fr) !important; }
+    .ly-media-grid { grid-template-columns: minmax(240px,340px) 1fr !important; }
+    .ly-media-grid > div:first-child { margin-bottom: 0 !important; }
+  }
+</style>
+</helmet>
+
+<div ref="{{ setRoot }}" style="position:relative; z-index:1; background:#FFFFFF; color:#0D0D0D; font-family:'Bricolage Grotesque',-apple-system,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;">
+
+  <!-- architectural hairline grid -->
+  <div style="position:fixed; inset:0; z-index:0; pointer-events:none; background-image:repeating-linear-gradient(to right, rgba(13,13,13,0.055) 0, rgba(13,13,13,0.055) 1px, transparent 1px, transparent 12.5%);"></div>
+
+  <!-- grain texture -->
+  <svg style="position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:200; opacity:0.035; mix-blend-mode:overlay;">
+    <filter id="lyNoise"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter>
+    <rect width="100%" height="100%" filter="url(#lyNoise)"></rect>
+  </svg>
+
+  <!-- NAV -->
+  <header ref="{{ setNav }}" style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px clamp(20px,5vw,64px); backdrop-filter:blur(16px); background:rgba(255,255,255,0.8); border-bottom:1px solid rgba(13,13,13,0.09); transition:box-shadow .3s ease;">
+    <a href="#top" style="display:flex; align-items:center; gap:11px; text-decoration:none; color:#0D0D0D;">
+      <span style="display:grid; place-items:center; width:32px; height:32px; background:#0D0D0D; border-radius:9px; font-family:'Newsreader',serif; font-style:italic; font-size:19px; color:#39FF14;">L</span>
+      <span style="font-weight:700; font-size:17px; letter-spacing:-0.01em;">Layola<span style="color:#39FF14;">.</span></span>
+    </a>
+    <nav class="ly-nav-links" style="display:flex; align-items:center; gap:32px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.04em;">
+      <a href="#services" style="text-decoration:none; color:#3A3A34; padding-bottom:3px; border-bottom:1px solid transparent; transition:border-color .2s, color .2s;" style-hover="border-color:#39FF14; color:#0D0D0D;">services</a>
+      <a href="#work" style="text-decoration:none; color:#3A3A34; padding-bottom:3px; border-bottom:1px solid transparent; transition:border-color .2s, color .2s;" style-hover="border-color:#39FF14; color:#0D0D0D;">our work</a>
+      <a href="#media" style="text-decoration:none; color:#3A3A34; padding-bottom:3px; border-bottom:1px solid transparent; transition:border-color .2s, color .2s;" style-hover="border-color:#39FF14; color:#0D0D0D;">video &amp; photo</a>
+      <a href="#seo" style="text-decoration:none; color:#3A3A34; padding-bottom:3px; border-bottom:1px solid transparent; transition:border-color .2s, color .2s;" style-hover="border-color:#39FF14; color:#0D0D0D;">seo &amp; growth</a>
+      <a href="#founder" style="text-decoration:none; color:#3A3A34; padding-bottom:3px; border-bottom:1px solid transparent; transition:border-color .2s, color .2s;" style-hover="border-color:#39FF14; color:#0D0D0D;">founder</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="#contact" class="ly-magnetic" style="font-family:'Space Mono',monospace; font-size:12.5px; letter-spacing:0.02em; text-decoration:none; color:#0D0D0D; background:#39FF14; padding:11px 18px; border-radius:999px; font-weight:600; transition:transform .15s ease;">Free audit →</a>
+      <button class="ly-menu-btn" onClick="{{ toggleMenu }}" aria-label="Menu" style="display:none; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; border:1px solid rgba(13,13,13,0.14); background:#fff; flex:none; padding:0;">
+        <span style="{{ menuBarTopStyle }}"></span>
+        <span style="{{ menuBarBotStyle }}"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU OVERLAY -->
+  <div style="{{ mobileMenuStyle }}">
+    <a href="#services" onClick="{{ closeMenu }}" style="text-decoration:none; color:#0D0D0D; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:28px;">Services</a>
+    <a href="#work" onClick="{{ closeMenu }}" style="text-decoration:none; color:#0D0D0D; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:28px;">Our Work</a>
+    <a href="#media" onClick="{{ closeMenu }}" style="text-decoration:none; color:#0D0D0D; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:28px;">Video &amp; Photo</a>
+    <a href="#seo" onClick="{{ closeMenu }}" style="text-decoration:none; color:#0D0D0D; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:28px;">SEO &amp; Growth</a>
+    <a href="#founder" onClick="{{ closeMenu }}" style="text-decoration:none; color:#0D0D0D; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:28px;">Founder</a>
+    <a href="#contact" onClick="{{ closeMenu }}" style="margin-top:12px; text-decoration:none; text-align:center; color:#0D0D0D; background:#39FF14; font-family:'Space Mono',monospace; font-weight:700; font-size:16px; padding:16px; border-radius:14px;">Free audit →</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="top" style="position:relative; background:#FFFFFF; padding:clamp(90px,13vh,168px) 18px 0;">
+    <div class="ly-hero-outer" style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:44px 1fr; gap:0;">
+
+      <!-- rotated rail -->
+      <div class="ly-rail" style="position:relative; border-right:1px solid rgba(13,13,13,0.09);">
+        <div style="position:sticky; top:200px; display:flex; flex-direction:column; align-items:center; gap:60px;">
+          <span style="writing-mode:vertical-rl; transform:rotate(180deg); font-weight:800; font-size:14px; letter-spacing:0.18em;">LAYOLA</span>
+          <span style="writing-mode:vertical-rl; transform:rotate(180deg); font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:0.1em; color:#8A8A80;">[ Lagos, NG ]</span>
+        </div>
+      </div>
+
+      <div style="padding-left:clamp(24px,4vw,52px);">
+        <!-- top row: eyebrow + index -->
+        <div class="ly-index-row" style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:40px;">
+          <div style="display:inline-flex; align-items:center; gap:9px; background:#0D0D0D; color:#39FF14; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; padding:9px 16px; border-radius:999px; max-width:100%;">
+            <span style="width:6px; height:6px; border-radius:50%; background:#39FF14; animation:lyBlink 1.8s ease-in-out infinite; flex:none;"></span>Web Design &amp; Videography Agency · Lagos
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-family:'Space Mono',monospace; font-size:12.5px; min-width:220px;">
+            <sc-for list="{{ heroIndex }}" as="hi" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; gap:12px; padding-bottom:7px; border-bottom:1px solid rgba(13,13,13,0.1);">
+                <span style="color:#8A8A80;">{{ hi.n }}</span><span style="color:#0D0D0D;">{{ hi.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- overlap block -->
+        <div class="ly-hero-wrap" style="position:relative; min-height:clamp(360px,44vw,540px);">
+          <div class="ly-hero-panel" style="position:absolute; top:0; right:0; width:44%; height:min(80%,440px); border-radius:6px; overflow:hidden; background:#050505; box-shadow:0 40px 80px -30px rgba(0,0,0,0.5);">
+
+            <!-- slide 0: real photo — creatives working -->
+            <div style="{{ slideStyle0 }}">
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80&auto=format&fit=crop" alt="Creative team working together on a laptop" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+
+            <!-- slide 1: website design mockup (built, not photographed) -->
+            <div style="{{ slideStyle1 }}">
+              <div style="position:absolute; left:8%; top:16%; width:84%; background:#F2F1EA; border-radius:8px; overflow:hidden; box-shadow:0 26px 50px -18px rgba(0,0,0,0.6);">
+                <div style="display:flex; align-items:center; gap:5px; padding:8px 10px; background:#E4E2D6;">
+                  <span style="width:7px; height:7px; border-radius:50%; background:#d3d0c2;"></span>
+                  <span style="width:7px; height:7px; border-radius:50%; background:#d3d0c2;"></span>
+                  <span style="width:7px; height:7px; border-radius:50%; background:#d3d0c2;"></span>
+                  <span style="margin-left:8px; font-family:'Space Mono',monospace; font-size:9px; color:#8A8A80;">yourbusiness.com</span>
+                </div>
+                <div style="padding:16px 16px 20px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                    <span style="font-weight:800; font-size:12px; color:#0D0D0D;">YourBrand</span>
+                    <span style="width:54px; height:9px; border-radius:4px; background:#39FF14;"></span>
+                  </div>
+                  <div style="height:11px; width:78%; border-radius:5px; background:#0D0D0D; margin-bottom:8px;"></div>
+                  <div style="height:11px; width:52%; border-radius:5px; background:#39FF14; margin-bottom:16px;"></div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <span style="height:52px; border-radius:7px; background:#E4E2D6;"></span>
+                    <span style="height:52px; border-radius:7px; background:#E4E2D6;"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- slide 2: app design mockup -->
+            <div style="{{ slideStyle2 }}">
+              <div style="position:absolute; left:50%; top:10%; transform:translateX(-50%); width:44%; height:80%; background:#F2F1EA; border:4px solid #0D0D0D; border-radius:22px; overflow:hidden; box-shadow:0 24px 46px -16px rgba(0,0,0,0.65);">
+                <div style="height:15px; width:34%; margin:7px auto 10px; background:#0D0D0D; border-radius:0 0 8px 8px;"></div>
+                <div style="padding:0 11%;">
+                  <div style="height:38px; border-radius:8px; background:#39FF14; margin-bottom:9px;"></div>
+                  <div style="height:8px; width:86%; border-radius:4px; background:#d3d0c2; margin-bottom:6px;"></div>
+                  <div style="height:8px; width:60%; border-radius:4px; background:#d3d0c2; margin-bottom:12px;"></div>
+                  <div style="height:22px; border-radius:6px; background:#0D0D0D; margin-bottom:8px;"></div>
+                  <div style="height:22px; border-radius:6px; border:1.5px solid #0D0D0D;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- slide 3: Google Business listing mockup -->
+            <div style="{{ slideStyle3 }}">
+              <div style="position:absolute; left:8%; top:16%; width:84%; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 26px 50px -18px rgba(0,0,0,0.6); padding:16px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                  <span style="width:34px; height:34px; border-radius:50%; background:#39FF14; display:grid; place-items:center; font-weight:800; font-size:13px; color:#0D0D0D; flex:none;">L</span>
+                  <div>
+                    <div style="font-weight:800; font-size:12.5px; color:#0D0D0D;">Layola Digital Agency</div>
+                    <div style="font-family:'Space Mono',monospace; font-size:9px; color:#7A7A72;">Web Design Agency · Lekki, Lagos</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+                  <span style="color:#39FF14; font-size:13px;">★★★★★</span>
+                  <span style="font-family:'Space Mono',monospace; font-size:10px; color:#7A7A72;">5.0 (48 reviews)</span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px;">
+                  <span style="height:34px; border-radius:5px; background:#E4E2D6;"></span>
+                  <span style="height:34px; border-radius:5px; background:#E4E2D6;"></span>
+                  <span style="height:34px; border-radius:5px; background:#E4E2D6;"></span>
+                  <span style="height:34px; border-radius:5px; background:#39FF14;"></span>
+                </div>
+              </div>
+            </div>
+
+            <div ref="{{ setGlow }}" style="position:absolute; inset:-20%; background:radial-gradient(circle at 60% 40%, rgba(57,255,20,0.22), transparent 60%); mix-blend-mode:screen; animation:lyGlow 6s ease-in-out infinite; pointer-events:none;"></div>
+            <div style="position:absolute; inset:0; background:linear-gradient(190deg, rgba(5,5,5,0.05), rgba(5,5,5,0.6)); pointer-events:none;"></div>
+
+            <span style="position:absolute; top:18px; left:18px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.08em; color:#39FF14; border:1px solid rgba(57,255,20,0.4); background:rgba(5,5,5,0.5); padding:5px 10px; border-radius:999px; z-index:5;">{{ activeHeroLabel }}</span>
+            <span style="position:absolute; top:16px; right:18px; font-size:22px; color:#39FF14; animation:lySpin 7s linear infinite; display:inline-block; z-index:5;">✻</span>
+
+            <div style="position:absolute; bottom:14px; left:18px; display:flex; gap:7px; z-index:5;">
+              <span onClick="{{ heroGoTo0 }}" style="{{ dotStyle0 }}"></span>
+              <span onClick="{{ heroGoTo1 }}" style="{{ dotStyle1 }}"></span>
+              <span onClick="{{ heroGoTo2 }}" style="{{ dotStyle2 }}"></span>
+              <span onClick="{{ heroGoTo3 }}" style="{{ dotStyle3 }}"></span>
+            </div>
+          </div>
+
+          <h1 class="ly-hero-h" style="position:relative; z-index:2; max-width:62%; padding-top:clamp(56px,7vw,96px); font-weight:800; font-size:clamp(38px,4.8vw,68px); line-height:1.03; letter-spacing:-0.03em; margin:0;">
+            Website &amp; Mobile App Development in <em style="font-family:'Newsreader',serif; font-style:italic; font-weight:400; color:#0D0D0D; background:linear-gradient(180deg,transparent 62%,#39FF14 62%); padding:0 .05em;">Lekki, Lagos</em>.
+          </h1>
+        </div>
+
+        <!-- below: subcopy + ctas + stats -->
+        <div style="margin-top:clamp(20px,3vw,34px); padding-bottom:clamp(50px,7vh,84px);">
+          <p style="font-size:18px; line-height:1.6; color:#4A4A43; max-width:56ch; margin:0 0 30px;">
+            Layola is a web design and videography agency in Lagos. We build fast, professional websites and shoot premium video &amp; photo content designed to bring your business up to 5x more customers, sales, and revenue online.
+          </p>
+          <div class="ly-cta-row" style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:36px;">
+            <a href="#contact" class="ly-magnetic" style="font-weight:700; font-size:16px; text-decoration:none; color:#0D0D0D; background:#39FF14; padding:16px 28px; border-radius:14px; box-shadow:0 18px 36px -14px rgba(57,255,20,0.6); transition:transform .15s ease;">Get a Free Website &amp; SEO Audit</a>
+            <a href="#work" class="ly-magnetic" style="font-family:'Space Mono',monospace; font-size:14px; text-decoration:none; color:#0D0D0D; border:1px solid rgba(13,13,13,0.22); padding:16px 24px; border-radius:14px; transition:transform .15s ease, border-color .2s ease;" style-hover="border-color:#0D0D0D;">See Our Work ↓</a>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,auto); gap:clamp(22px,3.4vw,44px);">
+            <div><div style="font-weight:800; font-size:30px; letter-spacing:-0.02em;">5×</div><div style="font-family:'Space Mono',monospace; font-size:10.5px; color:#7A7A72; text-transform:uppercase; letter-spacing:0.06em; margin-top:5px;">Growth benchmark</div></div>
+            <div><div style="font-weight:800; font-size:30px; letter-spacing:-0.02em;">3</div><div style="font-family:'Space Mono',monospace; font-size:10.5px; color:#7A7A72; text-transform:uppercase; letter-spacing:0.06em; margin-top:5px;">Services, one roof</div></div>
+            <div><div style="font-weight:800; font-size:30px; letter-spacing:-0.02em;">Lagos</div><div style="font-family:'Space Mono',monospace; font-size:10.5px; color:#7A7A72; text-transform:uppercase; letter-spacing:0.06em; margin-top:5px;">&amp; nationwide</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- diamond divider -->
+  <div style="display:flex; justify-content:center; padding:6px 0; position:relative; z-index:6;">
+    <span style="width:14px; height:14px; background:#39FF14; transform:rotate(45deg); display:inline-block;"></span>
+  </div>
+
+  <!-- diagonal marquee -->
+  <div style="position:relative; z-index:5; margin:0 0 -28px; transform:rotate(-1.4deg); overflow:hidden;">
+    <div style="background:#0D0D0D; padding:15px 0; white-space:nowrap; border-top:1px solid rgba(57,255,20,0.2); border-bottom:1px solid rgba(57,255,20,0.2);">
+      <div style="display:inline-flex; gap:36px; animation:lyMarquee 24s linear infinite; font-weight:700; font-size:17px; color:#39FF14; letter-spacing:0.01em;">
+        <sc-for list="{{ marquee }}" as="t" hint-placeholder-count="16">
+          <span style="display:inline-flex; align-items:center; gap:36px;">{{ t }}<span style="color:#3A3A34;">✦</span></span>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section style="position:relative; background:#0D0D0D; color:#F2F1EA; padding:clamp(76px,10vh,116px) clamp(20px,5vw,64px) clamp(60px,9vh,100px);">
+    <div style="max-width:960px; margin:0 auto; text-align:center;">
+      <h2 class="ly-sec-h" style="font-weight:700; font-size:clamp(30px,3.6vw,46px); line-height:1.14; letter-spacing:-0.02em; margin:0 0 24px;">Your business deserves more than a <em style="font-family:'Newsreader',serif; font-weight:400; font-style:italic; color:#39FF14;">beautiful</em> website.</h2>
+      <p style="font-size:18px; line-height:1.65; color:#ADADA3; margin:0 0 18px;">Most business websites in Nigeria are digital brochures. They look fine, but they do not sell. No one finds them on Google. Visitors leave without calling, ordering, or booking.</p>
+      <p style="font-size:18px; line-height:1.65; color:#F2F1EA; margin:0; font-weight:600;">A website that does not bring you customers is an expense. A website built for search, speed, and sales is an asset that works for you 24 hours a day.</p>
+    </div>
+  </section>
+
+  <!-- SERVICES — numbered index, no cards -->
+  <section id="services" style="padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px);">
+    <div style="max-width:1320px; margin:0 auto;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:44px;">
+        <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(30px,4vw,50px); line-height:1.08; letter-spacing:-0.025em; margin:0;">One agency.<br>Three ways to grow.</h2>
+        <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#4a7a0e; text-transform:uppercase;">[ What We Do ]</div>
+      </div>
+
+      <div style="border-top:1px solid rgba(13,13,13,0.12);">
+        <sc-for list="{{ solutionCards }}" as="c" hint-placeholder-count="3">
+          <a href="{{ c.href }}" class="ly-services-row" style="display:grid; grid-template-columns:70px 1fr auto; align-items:center; gap:24px; text-decoration:none; color:#0D0D0D; padding:30px 0; border-bottom:1px solid rgba(13,13,13,0.12); transition:padding-left .3s ease; position:relative;" style-hover="padding-left:14px;">
+            <span style="font-family:'Newsreader',serif; font-style:italic; font-size:34px; color:#4a7a0e;">{{ c.n }}</span>
+            <div>
+              <h3 style="font-weight:700; font-size:clamp(20px,2.6vw,28px); margin:0 0 8px; letter-spacing:-0.01em;">{{ c.title }}</h3>
+              <p style="font-size:14.5px; line-height:1.6; color:#55554E; margin:0; max-width:62ch;">{{ c.desc }}</p>
+            </div>
+            <span style="display:grid; place-items:center; width:46px; height:46px; background:#39FF14; border-radius:50%; font-size:17px; flex:none;">↗</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR WORK — bento featured grid -->
+  <section id="work" style="padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px); background:#FAFAF7;">
+    <div style="max-width:1320px; margin:0 auto;">
+      <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#4a7a0e; text-transform:uppercase; margin-bottom:16px; text-align:center;">[ Proof, Not Promises ]</div>
+      <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(32px,4.4vw,56px); line-height:1.05; letter-spacing:-0.025em; margin:0 0 52px; text-align:center;">Our work.</h2>
+
+      <div class="ly-carousel-wrap" style="position:relative;">
+        <div ref="{{ setTrack }}" style="display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom:12px; -ms-overflow-style:none; scrollbar-width:none;">
+          <sc-for list="{{ portfolio }}" as="p" hint-placeholder-count="7">
+            <a href="{{ p.href }}" target="_blank" rel="noopener noreferrer" style="scroll-snap-align:start; flex:0 0 min(420px,84vw); display:flex; flex-direction:column; text-decoration:none; color:inherit; background:#fff; border:1px solid rgba(13,13,13,0.1); border-radius:4px; overflow:hidden; transition:transform .35s cubic-bezier(.2,.7,.2,1); position:relative;" style-hover="transform:translateY(-6px);">
+              <div style="position:relative; overflow:hidden;">
+                <div style="height:260px; overflow:hidden;">
+                  <img src="{{ p.img }}" alt="{{ p.name }} live site" loading="lazy" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block; transition:transform .5s ease;" style-hover="transform:scale(1.05);">
+                </div>
+                <span style="position:absolute; top:14px; left:14px; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:0.05em; color:#39FF14; background:rgba(13,13,13,0.82); padding:5px 10px; border-radius:999px;">[ {{ p.n }} — {{ p.tag }} ]</span>
+                <span style="position:absolute; right:14px; bottom:14px; display:grid; place-items:center; width:36px; height:36px; background:#39FF14; color:#0D0D0D; border-radius:50%; font-size:15px;">↗</span>
+              </div>
+              <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:8px; flex:1;">
+                <h3 style="font-weight:700; font-size:20px; margin:0; letter-spacing:-0.01em;">{{ p.name }}</h3>
+                <p style="font-size:14px; line-height:1.55; color:#55554E; margin:0;">{{ p.desc }}</p>
+                <span style="font-family:'Space Mono',monospace; font-size:11px; color:#8A8A80; margin-top:4px;">{{ p.url }}</span>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+
+        <button onClick="{{ slidePrev }}" aria-label="Previous" class="ly-carousel-arrows" style="position:absolute; left:-22px; top:110px; width:48px; height:48px; border-radius:50%; background:#0D0D0D; color:#39FF14; border:none; font-size:18px; cursor:pointer; box-shadow:0 14px 30px -12px rgba(0,0,0,0.5); display:grid; place-items:center;">←</button>
+        <button onClick="{{ slideNext }}" aria-label="Next" class="ly-carousel-arrows" style="position:absolute; right:-22px; top:110px; width:48px; height:48px; border-radius:50%; background:#0D0D0D; color:#39FF14; border:none; font-size:18px; cursor:pointer; box-shadow:0 14px 30px -12px rgba(0,0,0,0.5); display:grid; place-items:center;">→</button>
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:8px; margin-top:28px;">
+        <sc-for list="{{ portfolio }}" as="p" hint-placeholder-count="7">
+          <span onClick="{{ p.goTo }}" style="width:8px; height:8px; border-radius:50%; background:rgba(13,13,13,0.18); cursor:pointer;"></span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY LAYOLA — editorial list -->
+  <section style="background:#FFFFFF; padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px);">
+    <div style="max-width:1320px; margin:0 auto;">
+      <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(28px,3.6vw,44px); line-height:1.15; letter-spacing:-0.02em; margin:0 0 48px; max-width:20ch;">Built for small businesses in Lagos &amp; across Nigeria.</h2>
+      <div style="border-top:1px solid rgba(13,13,13,0.12);">
+        <sc-for list="{{ whyLayola }}" as="w" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:70px 1fr; gap:24px; padding:26px 0; border-bottom:1px solid rgba(13,13,13,0.12);">
+            <span style="font-family:'Space Mono',monospace; font-size:12px; color:#8A8A80;">{{ w.n }}</span>
+            <div class="ly-why-inner" style="display:grid; grid-template-columns:minmax(160px,260px) 1fr; gap:24px; align-items:baseline;">
+              <h3 style="font-weight:700; font-size:18px; margin:0; letter-spacing:-0.01em;">{{ w.title }}</h3>
+              <p style="font-size:14.5px; line-height:1.6; color:#55554E; margin:0;">{{ w.desc }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS — process rail -->
+  <section style="padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px); background:#FAFAF7;">
+    <div style="max-width:1320px; margin:0 auto;">
+      <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(28px,3.6vw,44px); line-height:1.15; letter-spacing:-0.02em; margin:0 0 60px; text-align:center;">From first call to first sale.</h2>
+      <div class="ly-steps-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0; border-top:2px solid #0D0D0D;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+          <div style="border-left:1px solid rgba(13,13,13,0.14); padding:0 20px; margin-top:{{ s.offset }};">
+            <div style="width:9px; height:9px; border-radius:50%; background:#39FF14; margin:-5px 0 22px -25px;"></div>
+            <div style="font-family:'Newsreader',serif; font-style:italic; font-weight:400; font-size:44px; color:#0D0D0D; margin-bottom:14px; line-height:1;">{{ s.n }}</div>
+            <h3 style="font-weight:700; font-size:17px; margin:0 0 9px;">{{ s.title }}</h3>
+            <p style="font-size:14px; line-height:1.55; color:#55554E; margin:0;">{{ s.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO / GROWTH -->
+  <section id="seo" style="background:#0D0D0D; color:#F2F1EA; padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px);">
+    <div style="max-width:1320px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:32px; align-items:end; margin-bottom:52px;">
+        <div>
+          <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#39FF14; text-transform:uppercase; margin-bottom:16px;">[ AI SEO &amp; Digital Growth ]</div>
+          <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(28px,3.8vw,50px); line-height:1.05; letter-spacing:-0.025em; margin:0;">AI-powered SEO that puts your business in front of buyers.</h2>
+        </div>
+        <p style="font-size:16px; line-height:1.65; color:#B8B8AE; margin:0; max-width:50ch;">Every day, thousands of people in Lagos search Google for exactly what you sell. Our job is simple: make sure they find you first, not your competitor — on Google, Google Maps, and AI search tools like ChatGPT.</p>
+      </div>
+
+      <div class="ly-seo-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:0 48px; border-top:1px solid rgba(255,255,255,0.12);">
+        <sc-for list="{{ seoSystem }}" as="s" hint-placeholder-count="6">
+          <div style="padding:22px 0; border-bottom:1px solid rgba(255,255,255,0.1); display:grid; grid-template-columns:28px 1fr; gap:14px;">
+            <span style="font-family:'Space Mono',monospace; font-size:11px; color:#39FF14;">{{ s.n }}</span>
+            <div>
+              <h3 style="font-weight:600; font-size:16px; color:#39FF14; margin:0 0 7px;">{{ s.title }}</h3>
+              <p style="font-size:13.5px; line-height:1.55; color:#B8B8AE; margin:0;">{{ s.desc }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:44px; background:#39FF14; color:#0D0D0D; border-radius:40px 8px 40px 8px; padding:30px clamp(20px,5vw,34px); display:flex; align-items:center; gap:22px; flex-wrap:wrap;">
+        <span style="font-family:'Newsreader',serif; font-style:italic; font-weight:400; font-size:44px; flex:none;">5×</span>
+        <p style="font-size:15.5px; line-height:1.5; margin:0; max-width:60ch; font-weight:600;">More visibility means more visitors. More visitors on a conversion-built website means more calls, orders, and bookings — 5x growth is the benchmark we build toward for every client.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO & PHOTO -->
+  <section id="media" style="padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px); background:#FFFFFF;">
+    <div style="max-width:1320px; margin:0 auto;">
+      <div class="ly-drone-banner" style="position:relative; height:min(60vw,420px); min-height:200px; margin-bottom:clamp(36px,6vh,56px); overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?w=1800&q=80&auto=format&fit=crop" alt="Aerial drone view of Civic Towers, Lekki, Lagos" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div style="position:absolute; inset:0; background:linear-gradient(0deg, rgba(5,5,5,0.55), transparent 55%);"></div>
+        <span style="position:absolute; top:16px; left:16px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.08em; color:#39FF14; background:rgba(5,5,5,0.6); padding:5px 10px; border-radius:999px;">[ Aerial / Drone — Lekki, Lagos ]</span>
+        <span style="position:absolute; bottom:16px; left:18px; color:#F2F1EA; font-weight:700; font-size:clamp(18px,2.4vw,24px); letter-spacing:-0.01em;">Shot from above, right here in Lagos.</span>
+      </div>
+    <div class="ly-media-grid" style="display:grid; grid-template-columns:minmax(240px,340px) 1fr; gap:clamp(30px,5vw,60px);">
+      <div>
+        <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#4a7a0e; text-transform:uppercase; margin-bottom:16px;">[ Video &amp; Photo ]</div>
+        <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(28px,3.4vw,42px); line-height:1.12; letter-spacing:-0.025em; margin:0;">Photography and video that makes you unforgettable.</h2>
+      </div>
+      <div style="border-top:1px solid rgba(13,13,13,0.12);">
+        <sc-for list="{{ mediaServices }}" as="m" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:60px 1fr; gap:18px; padding:24px 0; border-bottom:1px solid rgba(13,13,13,0.12);">
+            <span style="font-family:'Space Mono',monospace; font-size:12px; color:#8A8A80;">{{ m.n }}</span>
+            <div>
+              <h3 style="font-weight:700; font-size:18px; margin:0 0 8px; letter-spacing:-0.01em;">{{ m.title }}</h3>
+              <p style="font-size:14.5px; line-height:1.6; color:#55554E; margin:0;">{{ m.desc }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section id="founder" style="background:#FAFAF7; padding:clamp(70px,10vh,110px) clamp(20px,5vw,64px);">
+    <div style="max-width:960px; margin:0 auto;">
+      <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#4a7a0e; text-transform:uppercase; margin-bottom:16px;">[ The Founder ]</div>
+      <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(28px,3.8vw,48px); line-height:1.1; letter-spacing:-0.025em; margin:0 0 28px;">The engineer behind Layola.</h2>
+      <p style="font-size:18px; line-height:1.65; color:#44443E; margin:0 0 30px; max-width:60ch;">Layola was founded on a simple conviction: small businesses in Nigeria deserve the same quality of digital engineering as the biggest brands.</p>
+
+      <div style="border-top:1px solid rgba(13,13,13,0.14); border-bottom:1px solid rgba(13,13,13,0.14); padding:28px 0; margin-bottom:30px;">
+        <p style="font-size:16px; line-height:1.7; color:#33332D; margin:0 0 16px;">Samuel Okediji is a software and infrastructure engineer with over 8 years of experience building systems for companies across Nigeria, Europe, and Asia. His background spans cloud engineering, full-stack web development, and published research — giving Layola a rare combination: agency creativity backed by real engineering discipline.</p>
+        <p style="font-size:16px; line-height:1.7; color:#33332D; margin:0;">He started Layola after watching too many Nigerian business owners pay for websites that looked decent but earned nothing. Every Layola project carries his standard: if it does not help the client sell more, it is not finished.</p>
+      </div>
+
+      <blockquote style="margin:0 0 32px; padding:28px 32px; border-left:3px solid #39FF14; background:#0D0D0D; color:#F2F1EA; font-family:'Newsreader',serif; font-style:italic; font-weight:400; font-size:22px; line-height:1.5;">
+        "A website is not a certificate you hang on the wall. It is a salesperson that should be closing deals while you sleep."
+      </blockquote>
+
+      <a href="#contact" class="ly-magnetic" style="font-weight:700; font-size:16px; text-decoration:none; color:#0D0D0D; background:#39FF14; padding:16px 28px; border-radius:14px; display:inline-block; transition:transform .15s ease;">Work With Us</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="padding:clamp(74px,11vh,120px) clamp(20px,5vw,64px) clamp(50px,7vh,80px); background:#FFFFFF;">
+    <div style="max-width:900px; margin:0 auto; text-align:center;">
+      <h2 class="ly-sec-h" style="font-weight:800; font-size:clamp(36px,5.4vw,64px); line-height:1.03; letter-spacing:-0.025em; margin:0 0 24px;">Let's build something that sells.</h2>
+      <p style="font-size:17px; line-height:1.6; color:#44443E; max-width:56ch; margin:0 auto 38px;">Tell us about your business and your goal. We will reply within one working day with clear next steps and honest advice — whether you work with us or not.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:52px;">
+        <a href="https://wa.me/2347014682306" target="_blank" rel="noopener noreferrer" class="ly-magnetic" style="font-weight:700; font-size:16px; text-decoration:none; color:#0D0D0D; background:#39FF14; padding:17px 30px; border-radius:14px; transition:transform .15s ease;">Chat With Us on WhatsApp</a>
+        <a href="mailto:hello@layoladigital.com" class="ly-magnetic" style="font-family:'Space Mono',monospace; font-size:14px; text-decoration:none; color:#0D0D0D; border:1px solid rgba(13,13,13,0.2); padding:17px 24px; border-radius:14px; transition:transform .15s ease;">hello@layoladigital.com</a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); border-top:1px solid rgba(13,13,13,0.12); border-left:1px solid rgba(13,13,13,0.12);">
+        <sc-for list="{{ contactBlocks }}" as="c" hint-placeholder-count="4">
+          <div style="border-right:1px solid rgba(13,13,13,0.12); border-bottom:1px solid rgba(13,13,13,0.12); padding:18px 20px; text-align:left;">
+            <div style="font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:0.08em; color:#8A8A80; text-transform:uppercase; margin-bottom:7px;">{{ c.label }}</div>
+            <div style="font-size:15px; font-weight:700; color:#0D0D0D;">{{ c.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="max-width:1320px; margin:60px auto 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; padding-top:28px; border-top:1px solid rgba(13,13,13,0.09); font-family:'Space Mono',monospace; font-size:12px; color:#7A7A72;">
+      <span>Layola Web and Media Digital Agency</span>
+      <span>Lagos, Nigeria · Serving clients nationwide</span>
+    </div>
+  </section>
+
+  <!-- WHATSAPP FAB -->
+  <a href="https://wa.me/2347014682306" target="_blank" rel="noopener noreferrer" class="ly-whatsapp-fab" style="position:fixed; right:24px; bottom:24px; z-index:60; display:flex; align-items:center; gap:10px; background:#25D366; color:#fff; text-decoration:none; padding:14px 20px 14px 14px; border-radius:999px; box-shadow:0 14px 30px -10px rgba(37,211,102,0.6); font-weight:700; font-size:15px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.1-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3c-.9-1.4-1.3-3-1.3-4.7 0-4.6 3.7-8.3 8.3-8.3s8.3 3.7 8.3 8.3-3.6 8.6-8.1 8.6z"/></svg>
+    <span>WhatsApp Us</span>
+  </a>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { heroIdx: 0, menuOpen: false };
+
+  toggleMenu() { this.setState((s) => ({ menuOpen: !s.menuOpen })); }
+  closeMenu() { this.setState({ menuOpen: false }); }
+
+  heroGoTo(i) {
+    this.setState({ heroIdx: i });
+    if (this._heroTimer) { clearInterval(this._heroTimer); this._startHeroTimer(); }
+  }
+  _startHeroTimer() {
+    this._heroTimer = setInterval(() => {
+      this.setState((s) => ({ heroIdx: (s.heroIdx + 1) % 4 }));
+    }, 4200);
+  }
+
+  componentDidMount() {
+    this._startHeroTimer();
+    this._onScroll = () => {
+      if (this._nav) {
+        this._nav.style.boxShadow = window.scrollY > 8 ? '0 8px 24px -18px rgba(0,0,0,0.35)' : 'none';
+      }
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+
+    // scroll reveal: hide below-fold section headers/cards, reveal on intersect
+    this._revealEls = Array.from(document.querySelectorAll('h2.ly-sec-h, .ly-services-row, section#work a, section#seo > div > div'));
+    this._revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('ly-reveal-init');
+          this._revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    this._revealEls.forEach((el) => {
+      el.classList.add('ly-reveal');
+      const rect = el.getBoundingClientRect();
+      if (rect.top > window.innerHeight * 0.92) {
+        el.classList.add('ly-reveal-init');
+        this._revealObserver.observe(el);
+      }
+    });
+
+    this._onMove = (e) => {
+      if (!this._root || !this._glow) return;
+      const rect = this._root.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      this._glow.style.transform = `translate(${relX * 30}px, ${relY * 30}px)`;
+    };
+    window.addEventListener('mousemove', this._onMove, { passive: true });
+
+    this._magnetEls = Array.from(document.querySelectorAll('.ly-magnetic'));
+    this._magnetHandlers = this._magnetEls.map((el) => {
+      const onMove = (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.25;
+        const y = (e.clientY - r.top - r.height / 2) * 0.25;
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      };
+      const onLeave = () => { el.style.transform = 'translate(0,0)'; };
+      el.addEventListener('mousemove', onMove);
+      el.addEventListener('mouseleave', onLeave);
+      return { el, onMove, onLeave };
+    });
+  }
+
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._revealObserver) this._revealObserver.disconnect();
+    if (this._heroTimer) clearInterval(this._heroTimer);
+    if (this._onMove) window.removeEventListener('mousemove', this._onMove);
+    if (this._magnetHandlers) {
+      this._magnetHandlers.forEach(({ el, onMove, onLeave }) => {
+        el.removeEventListener('mousemove', onMove);
+        el.removeEventListener('mouseleave', onLeave);
+      });
+    }
+  }
+
+  slidePrevHandler() {
+    if (this._track) this._track.scrollBy({ left: -440, behavior: 'smooth' });
+  }
+  slideNextHandler() {
+    if (this._track) this._track.scrollBy({ left: 440, behavior: 'smooth' });
+  }
+  slideToIndex(i) {
+    if (this._track) this._track.scrollTo({ left: i * 440, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const heroIdx = this.state.heroIdx;
+    const menuOpen = this.state.menuOpen;
+    const barBase = 'position:absolute; width:20px; height:2px; background:#0D0D0D; transition:transform .25s ease, opacity .2s ease;';
+    const menuBarTopStyle = barBase + (menuOpen ? ' transform:rotate(45deg) translateY(0);' : ' transform:translateY(-4px);');
+    const menuBarBotStyle = barBase + (menuOpen ? ' transform:rotate(-45deg) translateY(0);' : ' transform:translateY(4px);');
+    const mobileMenuStyle = 'position:fixed; inset:0; z-index:99; background:#FFFFFF; display:flex; flex-direction:column; justify-content:center; gap:22px; padding:24px 32px; transition:opacity .25s ease, visibility .25s ease; '
+      + (menuOpen ? 'opacity:1; visibility:visible;' : 'opacity:0; visibility:hidden;');
+    const heroLabels = ['[ Creatives at Work ]', '[ Website Design ]', '[ App Design ]', '[ Google Business ]'];
+    const slideBase = 'position:absolute; inset:0; transition:opacity .8s ease; ';
+    const slideStyleFor = (i) => slideBase + (i === heroIdx ? 'opacity:1; z-index:2;' : 'opacity:0; z-index:1;');
+    const dotStyleFor = (i) => `width:${i === heroIdx ? '20px' : '8px'}; height:8px; border-radius:999px; background:${i === heroIdx ? '#39FF14' : 'rgba(255,255,255,0.4)'}; cursor:pointer; transition:all .3s ease;`;
+
+    const portfolioRaw = [
+        { n: '01', name: 'MartX', tag: 'Live Commerce', desc: 'AI commerce platform for live shopping, gift cards, AI try-on, and crypto/wallet checkout across Africa.', url: 'martx.io', href: 'https://www.martx.io', img: 'assets/martx-demo.png' },
+        { n: '02', name: 'Asooke Fashion', tag: 'E-commerce', desc: 'Luxury Aṣọ Òkè fashion storefront with full catalog, cart/checkout, and crypto payments — worldwide shipping.', url: 'asookefashion.com', href: 'https://asookefashion.com', img: 'assets/asooke-demo.png' },
+        { n: '03', name: 'NexolPay', tag: 'Fintech', desc: 'Fintech product converting gift cards into cash, with a full conversion flow and dashboard UX.', url: 'nexolpay.xyz', href: 'https://nexolpay.xyz', img: 'assets/nexolpay.png' },
+        { n: '04', name: 'CW Lagos', tag: 'Real Estate', desc: 'Real-estate brokerage with property listings, search & filter, and shortlet booking.', url: 'cwlagos.com', href: 'https://cwlagos.com', img: 'assets/cw-lagos.png' },
+        { n: '05', name: 'Ani Talent', tag: 'Platform', desc: 'Talent-management platform with dynamic listings, filtering, and responsive layouts.', url: 'anitalent.com', href: 'https://anitalent.com', img: 'assets/ani-talent.png' },
+        { n: '06', name: 'Decentralized RPC Dashboard', tag: 'Web3', desc: 'Web3 dashboard monitoring Ethereum RPC endpoints with live status, latency, and uptime metrics.', url: 'decentralizedrpcdash.netlify.app', href: 'https://decentralizedrpcdash.netlify.app', img: 'assets/eth-rpc.png' },
+        { n: '07', name: 'Rooted Journeys', tag: 'Travel', desc: 'Luxury family-travel agency with custom templates for trips, destinations, and consultation booking.', url: 'rootedjourneys.com', href: 'https://wordpress-1563855-6471033.cloudwaysapps.com', img: 'assets/rooted-journeys.png' }
+    ];
+
+    return {
+      setRoot: (el) => { this._root = el; },
+      setNav: (el) => { this._nav = el; },
+      setGlow: (el) => { this._glow = el; },
+      setTrack: (el) => { this._track = el; },
+      toggleMenu: () => this.toggleMenu(),
+      closeMenu: () => this.closeMenu(),
+      menuBarTopStyle,
+      menuBarBotStyle,
+      mobileMenuStyle,
+      activeHeroLabel: heroLabels[heroIdx],
+      slideStyle0: slideStyleFor(0),
+      slideStyle1: slideStyleFor(1),
+      slideStyle2: slideStyleFor(2),
+      slideStyle3: slideStyleFor(3),
+      dotStyle0: dotStyleFor(0),
+      dotStyle1: dotStyleFor(1),
+      dotStyle2: dotStyleFor(2),
+      dotStyle3: dotStyleFor(3),
+      heroGoTo0: () => this.heroGoTo(0),
+      heroGoTo1: () => this.heroGoTo(1),
+      heroGoTo2: () => this.heroGoTo(2),
+      heroGoTo3: () => this.heroGoTo(3),
+      slidePrev: () => this.slidePrevHandler(),
+      slideNext: () => this.slideNextHandler(),
+      portfolio: portfolioRaw.map((p, i) => ({ ...p, goTo: () => this.slideToIndex(i) })),
+
+      heroIndex: [
+        { n: '01', label: 'Web Design & Dev' },
+        { n: '02', label: 'Video & Photo' },
+        { n: '03', label: 'AI SEO & Growth' }
+      ],
+
+      marquee: ['Web Design', 'Videography', 'Photography', 'Drone Coverage', 'AI SEO', 'Local Search', 'Digital Growth'],
+
+      solutionCards: [
+        { n: '01', title: 'Business Website Development', desc: 'Fast, mobile-first websites built to convert. Corporate sites, e-commerce stores, booking systems, and landing pages engineered around one goal: turning visitors into customers.', href: '#services' },
+        { n: '02', title: 'Videography, Photography & Drone Coverage', desc: 'Birthday photoshoots, music video production, event coverage, and cinematic drone footage. Premium visuals that give your brand the professional edge online.', href: '#media' },
+        { n: '03', title: 'AI-Powered SEO & Digital Growth', desc: 'We use modern AI SEO strategies to put your business in front of people already searching for what you sell, on Google, Google Maps, and AI search tools like ChatGPT.', href: '#seo' }
+      ],
+      whyLayola: [
+        { n: '01', title: 'Results first', desc: 'We speak in sales, not jargon. Every project starts with the question: how does this bring you more customers?' },
+        { n: '02', title: 'Mobile and speed obsessed', desc: 'Your customers browse on their phones. Every website we build loads fast on mobile and on Nigerian networks.' },
+        { n: '03', title: 'AI-ready SEO', desc: 'Search is changing. We optimize your business for Google and for AI assistants people now use to find services.' },
+        { n: '04', title: 'Everything in-house', desc: 'Design, development, video, photography, and growth under one roof. No juggling five vendors.' }
+      ],
+      steps: [
+        { n: '01', title: 'Free Audit', desc: 'We audit your current online presence and map where your customers are searching.', offset: '0px' },
+        { n: '02', title: 'Build', desc: 'We build or rebuild your website around speed, trust, and conversion.', offset: '30px' },
+        { n: '03', title: 'Get Found', desc: 'We deploy AI SEO, local search, and content strategies that bring buyers to you.', offset: '0px' },
+        { n: '04', title: 'Grow', desc: 'We track calls, orders, and enquiries so you see exactly what your website earns you.', offset: '30px' }
+      ],
+      seoSystem: [
+        { n: '01', title: 'AI keyword intelligence', desc: 'AI-assisted research finds the exact search terms your customers in Lagos and Nigeria use, including low-competition terms competitors ignore.' },
+        { n: '02', title: 'Local SEO domination', desc: 'Google Business Profile optimization, reviews strategy, and local citations so you dominate "near me" searches and Google Maps.' },
+        { n: '03', title: 'AI search visibility (GEO)', desc: 'Structured data, entity optimization, and authoritative content so AI assistants like ChatGPT and Gemini recommend your business by name.' },
+        { n: '04', title: 'Content that converts', desc: 'Blog posts, service pages, and FAQ content that answer real customer questions and rank for buying-intent keywords.' },
+        { n: '05', title: 'Technical SEO', desc: 'Speed, mobile performance, indexing, and schema markup handled so Google trusts your site.' },
+        { n: '06', title: 'Transparent reporting', desc: 'Monthly reports in plain language: rankings, traffic, calls, and enquiries. You see what your investment returns.' }
+      ],
+      mediaServices: [
+        { n: '01', title: 'Birthday Photoshoots', desc: 'Creative direction, professional lighting, and premium retouching to deliver portraits you will frame, post, and treasure.' },
+        { n: '02', title: 'Music Video Production', desc: 'Cinematic color, sharp direction, and edits built for YouTube, Instagram, and TikTok — full production, concept to final grade.' },
+        { n: '03', title: 'Drone Coverage & Aerial Videography', desc: 'Certified drone coverage for events, real estate, construction progress, music videos, and brand films.' },
+        { n: '04', title: 'Event & Brand Coverage', desc: 'Corporate events, launches, weddings, and brand campaigns documented with a storyteller\'s eye.' }
+      ],
+      contactBlocks: [
+        { label: 'WhatsApp', value: '+234 701 468 2306' },
+        { label: 'Phone', value: '+234 701 468 2306' },
+        { label: 'Email', value: 'hello@layoladigital.com' },
+        { label: 'Location', value: 'Lagos, Nigeria' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
